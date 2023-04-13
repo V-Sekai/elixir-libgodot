@@ -6,25 +6,6 @@ Mix.install([
 ])
 ```
 
-<!-- livebook:{"output":true} -->
-
-```
-Resolving Hex dependencies...
-Resolution completed in 0.039s
-New:
-  jason 1.4.0
-* Getting jason (Hex package)
-==> jason
-Compiling 10 files (.ex)
-Generated jason app
-```
-
-<!-- livebook:{"output":true} -->
-
-```
-:ok
-```
-
 ## Section
 
 <!-- livebook:{"reevaluate_automatically":true} -->
@@ -139,27 +120,6 @@ methods = Enum.sort(methods)
 File.write(spec, Enum.join(methods, "\n"))
 ```
 
-<!-- livebook:{"output":true} -->
-
-```
-
-11:44:59.564 [warn] Description: 'Server authenticity is not verified since certificate path validation is not enabled'
-     Reason: 'The option {verify, verify_peer} and one of the options \'cacertfile\' or \'cacerts\' are required to enable this.'
-
-
-11:44:59.967 [warn] Description: 'Server authenticity is not verified since certificate path validation is not enabled'
-     Reason: 'The option {verify, verify_peer} and one of the options \'cacertfile\' or \'cacerts\' are required to enable this.'
-
-warning: variable "c" is unused (if the variable is not meant to be used, prefix it with an underscore)
-  #cell:b5z5jydjthltcguhtunwuzk3a3kbrbdl:53: LibGodot.get_classes/3
-
-warning: variable "methods" is unused (if the variable is not meant to be used, prefix it with an underscore)
-  #cell:b5z5jydjthltcguhtunwuzk3a3kbrbdl:87: LibGodot.get_methods/2
-
-```
-
-<!-- livebook:{"output":true} -->
-
-```
-:ok
+```elixir
+IO.inspect(Path.absname(__DIR__))
 ```

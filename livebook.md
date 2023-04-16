@@ -10,12 +10,6 @@ Mix.install([
 ])
 ```
 
-<!-- livebook:{"output":true} -->
-
-```
-:ok
-```
-
 ## Section
 
 ```elixir
@@ -132,12 +126,6 @@ defmodule LibGodot do
 end
 ```
 
-<!-- livebook:{"output":true} -->
-
-```
-{:module, LibGodot, <<70, 79, 82, 49, 0, 0, 22, ...>>, {:get_methods, 2}}
-```
-
 ```elixir
 Kino.listen(form, fn
   %{data: data, origin: origin} ->
@@ -160,19 +148,8 @@ Kino.listen(form, fn
     classes = api["classes"]
     classes = Enum.concat(classes, api["builtin_classes"])
     methods = LibGodot.get_methods(classes, api)
-    Kino.DataTable.new(methods)
-    Kino.Frame.render(frame, methods, to: origin)
+    Kino.Frame.render(frame, Kino.DataTable.new(methods), to: origin)
 end)
 
 frame
-```
-
-<!-- livebook:{"output":true} -->
-
-```
-
-18:19:54.030 [warn] Description: 'Authenticity is not established by certificate path validation'
-     Reason: 'Option {verify, verify_peer} and cacertfile/cacerts is missing'
-
-
 ```

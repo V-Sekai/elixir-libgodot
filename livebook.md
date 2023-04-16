@@ -62,6 +62,7 @@ defmodule LibGodot do
           [
             %{
               class_name: "",
+              method_name: method_name,
               return: return_type,
               spec:
                 "spec #{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
@@ -71,6 +72,7 @@ defmodule LibGodot do
           [
             %{
               class_name: "",
+              method_name: method_name,
               return: return_type,
               spec: "spec #{method_name}() :: {:ok :: label, #{return_type}}"
             }
@@ -108,6 +110,7 @@ defmodule LibGodot do
           [
             %{
               class_name: class_name,
+              method_name: method_name,
               return: return_type,
               spec:
                 "spec #{class_name}.#{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
@@ -117,6 +120,7 @@ defmodule LibGodot do
           [
             %{
               class_name: class_name,
+              method_name: method_name,
               return: return_type,
               spec:
                 "spec #{class_name}.#{method_name}() :: {:ok :: label, state :: State, #{return_type}}"

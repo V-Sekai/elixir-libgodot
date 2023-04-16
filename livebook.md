@@ -148,6 +148,8 @@ Kino.listen(form, fn
     classes = api["classes"]
     classes = Enum.concat(classes, api["builtin_classes"])
     methods = LibGodot.get_methods(classes, api)
+    methods = Enum.uniq(methods)
+    methods = Enum.sort(methods)
     Kino.Frame.render(frame, Kino.DataTable.new(methods), to: origin)
 end)
 

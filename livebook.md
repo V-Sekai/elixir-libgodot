@@ -50,14 +50,11 @@ defmodule LibGodot do
 
         if arguments do
           argument_strings =
-            Enum.join(
-              Enum.flat_map(arguments, fn arg ->
-                argument_name = arg["name"]
-                argument_type = arg["type"]
-                ["#{argument_name} :: #{argument_type}, "]
-              end),
-              ", "
-            )
+            Enum.flat_map(arguments, fn arg ->
+              argument_name = arg["name"]
+              argument_type = arg["type"]
+              ["#{argument_name} :: #{argument_type}, "]
+            end)
 
           [
             %{
@@ -98,13 +95,11 @@ defmodule LibGodot do
 
         if arguments do
           argument_strings =
-            Enum.join(
-              Enum.flat_map(arguments, fn arg ->
-                argument_name = arg["name"]
-                argument_type = arg["type"]
-                ["#{argument_name} :: #{argument_type}, "]
-              end)
-            )
+            Enum.flat_map(arguments, fn arg ->
+              argument_name = arg["name"]
+              argument_type = arg["type"]
+              ["#{argument_name} :: #{argument_type}, "]
+            end)
 
           [
             %{

@@ -1,6 +1,6 @@
-<!-- livebook:{"app_settings":{"access_type":"public","slug":"kino-dir"}} -->
+<!-- livebook:{"app_settings":{"access_type":"public","slug":"libgodot-upload"}} -->
 
-# Printer
+# Godot Engine API json upload - fork
 
 ```elixir
 Mix.install([
@@ -9,32 +9,13 @@ Mix.install([
 ])
 ```
 
-<!-- livebook:{"output":true} -->
-
-```
-:ok
-```
-
 ## Section
 
 ```elixir
-url = 'https://github.com/V-Sekai/elixir-godot/raw/main/extension_api.json'
-:inets.start()
-:ssl.start()
+form = Kino.Control.form([data: Kino.Input.file("JSON API")], report_changes: true)
+```
 
-file = 'extension_api.json'
-File.rm(file)
-{:ok, :saved_to_file} = :httpc.request(:get, {url, []}, [], stream: file)
-
-api =
-  File.read!(file)
-  |> Jason.decode!()
-
-spec = "godot_elixir.spec.exs"
-File.rm(spec)
-classes = api["classes"]
-classes = Enum.concat(classes, api["builtin_classes"])
-
+```elixir
 defmodule LibGodot do
   def blank?(str_or_nil),
     do: "" == str_or_nil |> to_string() |> String.trim()
@@ -120,30 +101,19 @@ defmodule LibGodot do
       end)
   end
 end
-
-methods = LibGodot.get_methods(classes, api)
-methods = Enum.uniq(methods)
-methods = Enum.sort(methods)
-
-text = Enum.join(methods, "\n")
-Kino.Text.new("Method count: #{Enum.count(methods)}\nMethods:\n#{text}")
 ```
 
-<!-- livebook:{"output":true} -->
-
-```
-
-15:35:18.269 [warn] Description: 'Authenticity is not established by certificate path validation'
-     Reason: 'Option {verify, verify_peer} and cacertfile/cacerts is missing'
-
-
-15:35:18.324 [warn] Description: 'Authenticity is not established by certificate path validation'
-     Reason: 'Option {verify, verify_peer} and cacertfile/cacerts is missing'
-
-warning: variable "c" is unused (if the variable is not meant to be used, prefix it with an underscore)
-  #cell:2tgdulekflt6nsqxpb7zqqbwaxjz42j6:53: LibGodot.get_classes/3
-
-warning: variable "methods" is unused (if the variable is not meant to be used, prefix it with an underscore)
-  #cell:2tgdulekflt6nsqxpb7zqqbwaxjz42j6:88: LibGodot.get_methods/2
-
+```elixir
+Kino.animate(form, fn %{data: %{data: %{file_ref: file_ref}}} ->
+  path = Kino.Input.file_path(file_ref)
+  content = File.read!(path)
+  api = Jason.decode!(content)
+  classes = api["classes"]
+  classes = Enum.concat(classes, api["builtin_classes"])
+  methods = LibGodot.get_methods(classes, api)
+  methods = Enum.uniq(methods)
+  methods = Enum.sort(methods)
+  output = Enum.join(methods, "\n")
+  Kino.Text.new(output)
+end)
 ```

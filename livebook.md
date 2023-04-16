@@ -61,20 +61,17 @@ defmodule LibGodot do
 
           [
             %{
-              class_name: "",
-              method_name: method_name,
+              name: method_name,
               return: return_type,
-              spec:
-                "spec #{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
+              argument_strings: argument_strings
             }
           ]
         else
           [
             %{
-              class_name: "",
-              method_name: method_name,
+              name: method_name,
               return: return_type,
-              spec: "spec #{method_name}() :: {:ok :: label, #{return_type}}"
+              argument_strings: []
             }
           ]
         end
@@ -109,21 +106,17 @@ defmodule LibGodot do
 
           [
             %{
-              class_name: class_name,
-              method_name: method_name,
+              name: "#{class_name}.#{method_name}",
               return: return_type,
-              spec:
-                "spec #{class_name}.#{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
+              argument_strings: argument_strings
             }
           ]
         else
           [
             %{
-              class_name: class_name,
-              method_name: method_name,
+              name: "#{class_name}.#{method_name}",
               return: return_type,
-              spec:
-                "spec #{class_name}.#{method_name}() :: {:ok :: label, state :: State, #{return_type}}"
+              argument_strings: []
             }
           ]
         end

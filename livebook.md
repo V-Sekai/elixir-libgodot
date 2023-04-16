@@ -53,7 +53,7 @@ defmodule LibGodot do
             Enum.flat_map(arguments, fn arg ->
               argument_name = arg["name"]
               argument_type = arg["type"]
-              ["#{argument_name} :: #{argument_type}"]
+              ["#{argument_name} :: #{argument_type}", " "]
             end)
 
           [
@@ -98,7 +98,7 @@ defmodule LibGodot do
             Enum.flat_map(arguments, fn arg ->
               argument_name = arg["name"]
               argument_type = arg["type"]
-              ["#{argument_name} :: #{argument_type}"]
+              ["#{argument_name} :: #{argument_type}", " "]
             end)
 
           [

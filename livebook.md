@@ -1,14 +1,21 @@
-# Export elixir methods
+<!-- livebook:{"app_settings":{"access_type":"public","slug":"kino-dir"}} -->
+
+# Printer
 
 ```elixir
 Mix.install([
+  {:kino, "~> 0.9.1"},
   {:jason, "~> 1.4"}
 ])
 ```
 
-## Section
+<!-- livebook:{"output":true} -->
 
-<!-- livebook:{"reevaluate_automatically":true} -->
+```
+:ok
+```
+
+## Section
 
 ```elixir
 url = 'https://github.com/V-Sekai/elixir-godot/raw/main/extension_api.json'
@@ -117,9 +124,26 @@ end
 methods = LibGodot.get_methods(classes, api)
 methods = Enum.uniq(methods)
 methods = Enum.sort(methods)
-File.write(spec, Enum.join(methods, "\n"))
+
+text = Enum.join(methods, "\n")
+Kino.Text.new(text)
 ```
 
-```elixir
-IO.inspect(Path.absname(__DIR__))
+<!-- livebook:{"output":true} -->
+
+```
+
+15:30:43.321 [warn] Description: 'Authenticity is not established by certificate path validation'
+     Reason: 'Option {verify, verify_peer} and cacertfile/cacerts is missing'
+
+
+15:30:43.375 [warn] Description: 'Authenticity is not established by certificate path validation'
+     Reason: 'Option {verify, verify_peer} and cacertfile/cacerts is missing'
+
+warning: variable "c" is unused (if the variable is not meant to be used, prefix it with an underscore)
+  #cell:2tgdulekflt6nsqxpb7zqqbwaxjz42j6:53: LibGodot.get_classes/3
+
+warning: variable "methods" is unused (if the variable is not meant to be used, prefix it with an underscore)
+  #cell:2tgdulekflt6nsqxpb7zqqbwaxjz42j6:88: LibGodot.get_methods/2
+
 ```

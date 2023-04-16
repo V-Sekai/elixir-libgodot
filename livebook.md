@@ -38,7 +38,14 @@ defmodule LibGodot do
       [],
       Enum.flat_map(api["utility_functions"], fn method ->
         method_name = method["name"]
-        return_type = method["return_type"]
+
+        return_type =
+          if method["return_type"] == nil do
+            "void"
+          else
+            method["return_type"]
+          end
+
         arguments = Map.get(method, "arguments")
 
         if arguments do
@@ -55,6 +62,7 @@ defmodule LibGodot do
           [
             %{
               class_name: "",
+              return: return_type,
               spec:
                 "spec #{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
             }
@@ -63,6 +71,7 @@ defmodule LibGodot do
           [
             %{
               class_name: "",
+              return: return_type,
               spec: "spec #{method_name}() :: {:ok :: label, #{return_type}}"
             }
           ]
@@ -76,7 +85,14 @@ defmodule LibGodot do
       [],
       Enum.flat_map(class_methods, fn method ->
         method_name = method["name"]
-        return_type = method["return_type"]
+
+        return_type =
+          if method["return_type"] == nil do
+            "void"
+          else
+            method["return_type"]
+          end
+
         arguments = Map.get(method, "arguments")
 
         if arguments do
@@ -92,6 +108,7 @@ defmodule LibGodot do
           [
             %{
               class_name: class_name,
+              return: return_type,
               spec:
                 "spec #{class_name}.#{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
             }
@@ -100,6 +117,7 @@ defmodule LibGodot do
           [
             %{
               class_name: class_name,
+              return: return_type,
               spec:
                 "spec #{class_name}.#{method_name}() :: {:ok :: label, state :: State, #{return_type}}"
             }

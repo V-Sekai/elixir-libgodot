@@ -126,18 +126,18 @@ methods = Enum.uniq(methods)
 methods = Enum.sort(methods)
 
 text = Enum.join(methods, "\n")
-Kino.Text.new(text)
+Kino.Text.new("Method count: #{Enum.count(methods)}\nMethods:\n#{text}")
 ```
 
 <!-- livebook:{"output":true} -->
 
 ```
 
-15:30:43.321 [warn] Description: 'Authenticity is not established by certificate path validation'
+15:35:18.269 [warn] Description: 'Authenticity is not established by certificate path validation'
      Reason: 'Option {verify, verify_peer} and cacertfile/cacerts is missing'
 
 
-15:30:43.375 [warn] Description: 'Authenticity is not established by certificate path validation'
+15:35:18.324 [warn] Description: 'Authenticity is not established by certificate path validation'
      Reason: 'Option {verify, verify_peer} and cacertfile/cacerts is missing'
 
 warning: variable "c" is unused (if the variable is not meant to be used, prefix it with an underscore)

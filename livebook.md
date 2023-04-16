@@ -62,6 +62,7 @@ defmodule LibGodot do
           [
             %{
               name: method_name,
+              class_name: "",
               return: return_type,
               argument_strings: argument_strings
             }
@@ -70,6 +71,7 @@ defmodule LibGodot do
           [
             %{
               name: method_name,
+              class_name: "",
               return: return_type,
               argument_strings: []
             }
@@ -107,6 +109,7 @@ defmodule LibGodot do
           [
             %{
               name: "#{class_name}.#{method_name}",
+              class_name: class_name,
               return: return_type,
               argument_strings: argument_strings
             }
@@ -115,6 +118,7 @@ defmodule LibGodot do
           [
             %{
               name: "#{class_name}.#{method_name}",
+              class_name: class_name,
               return: return_type,
               argument_strings: []
             }

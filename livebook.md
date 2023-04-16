@@ -1,18 +1,37 @@
 <!-- livebook:{"app_settings":{"access_type":"public","slug":"libgodot-upload"}} -->
 
-# Godot Engine API json upload - fork
+# Godot Engine GDExtension API json upload
 
 ```elixir
 Mix.install([
   {:kino, "~> 0.9.1"},
-  {:jason, "~> 1.4"}
+  {:jason, "~> 1.4"},
+  {:briefly, "~> 0.4.0"}
 ])
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+:ok
 ```
 
 ## Section
 
 ```elixir
-form = Kino.Control.form([data: Kino.Input.file("JSON API")], report_changes: true)
+frame = Kino.Frame.new()
+
+form =
+  Kino.Control.form(
+    [
+      url:
+        Kino.Input.url("extension_api.json",
+          default: "https://github.com/V-Sekai/elixir-godot/raw/main/extension_api.json"
+        )
+    ],
+    submit: "Process",
+    report_changes: true
+  )
 ```
 
 ```elixir
@@ -40,18 +59,25 @@ defmodule LibGodot do
             )
 
           [
-            [
-              "spec #{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
-            ]
+            %{
+              class_name: "",
+              spec:
+                "spec #{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
+            }
           ]
         else
-          [["spec #{method_name}() :: {:ok :: label, #{return_type}}"]]
+          [
+            %{
+              class_name: "",
+              spec: "spec #{method_name}() :: {:ok :: label, #{return_type}}"
+            }
+          ]
         end
       end)
     )
   end
 
-  def get_classes(class_name, class_methods, c) do
+  def get_classes(class_name, class_methods) do
     Enum.concat(
       [],
       Enum.flat_map(class_methods, fn method ->
@@ -70,15 +96,19 @@ defmodule LibGodot do
             )
 
           [
-            [
-              "spec #{class_name}.#{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
-            ]
+            %{
+              class_name: class_name,
+              spec:
+                "spec #{class_name}.#{method_name}(#{argument_strings}) :: {:ok :: label, state :: State, #{return_type}}"
+            }
           ]
         else
           [
-            [
-              "spec #{class_name}.#{method_name}() :: {:ok :: label, state :: State, #{return_type}}"
-            ]
+            %{
+              class_name: class_name,
+              spec:
+                "spec #{class_name}.#{method_name}() :: {:ok :: label, state :: State, #{return_type}}"
+            }
           ]
         end
       end)
@@ -86,34 +116,63 @@ defmodule LibGodot do
   end
 
   def get_methods(classes, api) do
-    methods =
-      Enum.flat_map(classes, fn c ->
-        class_methods = Map.get(c, "methods")
-        class_name = c["name"]
+    Enum.flat_map(classes, fn c ->
+      class_methods = Map.get(c, "methods")
+      class_name = c["name"]
 
-        unless class_name == Object do
-          if class_methods do
-            get_classes(class_name, class_methods, c)
-          else
-            get_builtin_functions(api)
-          end
+      unless class_name == Object do
+        if class_methods do
+          get_classes(class_name, class_methods)
+        else
+          get_builtin_functions(api)
         end
-      end)
+      end
+    end)
   end
 end
 ```
 
+<!-- livebook:{"output":true} -->
+
+```
+{:module, LibGodot, <<70, 79, 82, 49, 0, 0, 22, ...>>, {:get_methods, 2}}
+```
+
 ```elixir
-Kino.animate(form, fn %{data: %{data: %{file_ref: file_ref}}} ->
-  path = Kino.Input.file_path(file_ref)
-  content = File.read!(path)
-  api = Jason.decode!(content)
-  classes = api["classes"]
-  classes = Enum.concat(classes, api["builtin_classes"])
-  methods = LibGodot.get_methods(classes, api)
-  methods = Enum.uniq(methods)
-  methods = Enum.sort(methods)
-  output = Enum.join(methods, "\n")
-  Kino.Text.new(output)
+Kino.listen(form, fn
+  %{data: data, origin: origin} ->
+    %{url: url} = data
+    :inets.start()
+    :ssl.start()
+    {:ok, dir} = Briefly.create(directory: true)
+    file = 'extension_api.json'
+    path = Path.join(dir, file)
+    :inets.start()
+    :ssl.start()
+
+    {:ok, :saved_to_file} =
+      :httpc.request(:get, {to_charlist(url), []}, [], stream: to_charlist(path))
+
+    api =
+      File.read!(path)
+      |> Jason.decode!()
+
+    classes = api["classes"]
+    classes = Enum.concat(classes, api["builtin_classes"])
+    methods = LibGodot.get_methods(classes, api)
+    Kino.DataTable.new(methods)
+    Kino.Frame.render(frame, methods, to: origin)
 end)
+
+frame
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+
+18:19:54.030 [warn] Description: 'Authenticity is not established by certificate path validation'
+     Reason: 'Option {verify, verify_peer} and cacertfile/cacerts is missing'
+
+
 ```

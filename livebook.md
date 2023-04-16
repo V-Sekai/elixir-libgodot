@@ -154,9 +154,7 @@ Kino.listen(form, fn
     %{url: url} = data
     :inets.start()
     :ssl.start()
-    {:ok, dir} = Briefly.create(directory: true)
-    file = 'extension_api.json'
-    path = Path.join(dir, file)
+    {:ok, path} = Briefly.create()
     :inets.start()
     :ssl.start()
 

@@ -26,9 +26,10 @@ defmodule GodotSpec do
   @type method_name :: binary()
   @type args :: [any()]
   @type pointer :: binary()
-  @type instance_result :: {:ok, binary()} | {:error, binary()}
+  @type instance_result :: {:ok, godot_type()} | {:error, binary()}
   @type godot_type :: binary()
 
   @spec call_method(instance(), method_name(), args()) :: {:ok, instance_result()} | {:error, binary()}
   @spec instantiate_class(class_name()) :: {:ok, pointer()} | {:error, binary()}
+  @spec call_static_method(class_name(), method_name(), args()) :: {:ok, instance_result()} | {:error, binary()}
 end

@@ -28,7 +28,7 @@ static ErlNifResourceType* godot_instance_term = NULL;
 static ErlNifPid pointer_storage_pid;
 
 // Unifex C function to call a method on a Godot class instance
-UNIFEX_TERM call_method(UnifexEnv *env, UnifexResource *instance, const char *method_name, ERL_NIF_TERM args) {
+UNIFEX_TERM call_instance_method(UnifexEnv *env, UnifexResource *instance, const char *method_name, ERL_NIF_TERM args) {
     // Cast the Unifex resource to your resource type
     GodotInstanceTerm *res = (GodotInstanceTerm*)instance->data;
 
@@ -41,6 +41,30 @@ UNIFEX_TERM call_method(UnifexEnv *env, UnifexResource *instance, const char *me
                 // Call the method using the retrieved pointer
                 void *pointer = enif_make_binary(env, &result);
                 // Your C code to call a method on a Godot class instance using the retrieved pointer
+            } else {
+                return result;
+            }
+        } else {
+            return enif_make_atom(env, "error");
+        }
+    } else {
+        return enif_make_atom(env, "error");
+    }
+
+    return enif_make_atom(env, "ok");
+}
+
+// Unifex C function to call a static method on a Godot class
+UNIFEX_TERM call_static_method(UnifexEnv *env, const char *class_name, const char *method_name, ERL_NIF_TERM args) {
+    // Look up the pointer in the storage process using the class name
+    ERL_NIF_TERM pointer_id = enif_make_binary(env, class_name);
+    ERL_NIF_TERM result;
+    if (enif_send(env, &pointer_storage_pid, NULL, enif_make_tuple2(env, enif_make_atom(env, "get_pointer"), pointer_id))) {
+        if (enif_receive(env, NULL, ERL_NIF_TERM_MAX, &result)) {
+            if (enif_is_binary(env, result)) {
+                // Call the method using the retrieved pointer
+                void *pointer = enif_make_binary(env, &result);
+                // Your C code to call a static method on a Godot class using the retrieved pointer
             } else {
                 return result;
             }
